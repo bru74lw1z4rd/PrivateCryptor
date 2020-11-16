@@ -12,7 +12,7 @@ class EncryptionProcess : public QObject {
 public:
     explicit EncryptionProcess(QObject* parent = nullptr);
 
-    Q_INVOKABLE QString encryptDecryptText(const bool isEncrypt, const int rounds,
+    Q_INVOKABLE QString encryptDecryptTextWithBlockCipher(const bool isEncrypt, const int rounds,
         const QByteArray& data, const QByteArray& blockSizeType,
         const QByteArray& cipher, const QByteArray& hashCipher,
         const QByteArray& key, const QByteArray& iv,

@@ -19,7 +19,7 @@ EncryptionProcess::EncryptionProcess(QObject* parent)
 /// \param password
 /// \return
 ///
-QString EncryptionProcess::encryptDecryptText(const bool isEncrypt, const int rounds,
+QString EncryptionProcess::encryptDecryptTextWithBlockCipher(const bool isEncrypt, const int rounds,
     const QByteArray& data, const QByteArray& blockSizeType,
     const QByteArray& cipher, const QByteArray& hashCipher,
     const QByteArray& key, const QByteArray& iv,
