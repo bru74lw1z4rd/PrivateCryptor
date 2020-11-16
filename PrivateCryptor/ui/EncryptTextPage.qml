@@ -269,6 +269,7 @@ Page {
                     TextField {
                         id: roundsField
                         placeholderText: qsTr("Enter count of Transformation Rounds")
+                        validator: IntValidator {}
                     }
                 }
 
@@ -399,12 +400,13 @@ Page {
                     Layout.alignment: Qt.AlignTop | Qt.AlignRight
                     Layout.margins: 20
 
-                    onTextEdited: { // blockSizeComboBox
-                        decryptionTextField.text = encryptionProcess.encryptDecryptText(true, parseInt(roundsField.text),
-                                                                                        encryptionTextField.text, blockSizeComboBox.currentText,
-                                                                                        encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
-                                                                                        aesKeyField.text, initializationVectorField.text,
-                                                                                        randomDeltaField.text, passwordField.text)
+                    onTextEdited: {
+                        decryptionTextField.text = encryptionProcess.encryptDecryptTextWithBlockCipher(
+                                                        true, parseInt(roundsField.text),
+                                                        encryptionTextField.text, blockSizeComboBox.currentText,
+                                                        encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
+                                                        aesKeyField.text, initializationVectorField.text,
+                                                        randomDeltaField.text, passwordField.text)
                     }
                 }
 
@@ -423,11 +425,12 @@ Page {
                     Layout.margins: 20
 
                     onTextEdited: {
-                        encryptionTextField.text = encryptionProcess.encryptDecryptText(false, parseInt(roundsField.text),
-                                                                                        decryptionTextField.text, blockSizeComboBox.currentText,
-                                                                                        encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
-                                                                                        aesKeyField.text, initializationVectorField.text,
-                                                                                        randomDeltaField.text, passwordField.text);
+                        encryptionTextField.text = encryptionProcess.encryptDecryptTextWithBlockCipher(
+                                                        false, parseInt(roundsField.text),
+                                                        decryptionTextField.text, blockSizeComboBox.currentText,
+                                                        encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
+                                                        aesKeyField.text, initializationVectorField.text,
+                                                        randomDeltaField.text, passwordField.text)
                     }
                 }
             }
