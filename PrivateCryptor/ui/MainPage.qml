@@ -1,0 +1,37 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
+import QtGraphicalEffects 1.15
+
+Page {
+    id: mainPage
+
+    background: Rectangle  {
+        color: "transparent"
+    }
+    
+    Text {
+        id: mainPageInformationText
+        color: "white"
+        text: qsTr("Choose action below to continue")
+        font.pixelSize: 24
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        
+        anchors.topMargin: 60
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+    
+    MainMenuLayout {
+        id: mainMenuLayout
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: mainPageInformationText.bottom
+        anchors.bottom: parent.bottom
+        anchors.margins: 15
+    }
+}
