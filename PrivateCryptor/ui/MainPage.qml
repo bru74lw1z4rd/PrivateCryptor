@@ -8,7 +8,7 @@ import QtGraphicalEffects 1.15
 Page {
     id: mainPage
 
-    background: Rectangle  {
+    background: Rectangle {
         color: "transparent"
     }
     

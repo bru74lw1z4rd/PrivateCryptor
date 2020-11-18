@@ -8,9 +8,9 @@ Item {
     property int customMargin: 15
     property int informationItemHeight: 18
 
-    property string gradientColorOne: "#4F37A2"
-    property string gradientColorTwo: "#45318E"
-    property string gradientColorThree: "#332468"
+    property string gradientColorOne: "#212F45"
+    property string gradientColorTwo: "#272640"
+    property string gradientColorThree: "#312244"
 
     id: appCreatorInformation
     height: 30
@@ -46,11 +46,11 @@ Item {
 
     Text {
         id: appCreatorText
+
         height: informationItemHeight
+
         textFormat: Text.MarkdownText
-        color: gradientColorOne
-        linkColor: "white"
-        text: qsTr("Made by [PrivateWeb Community](https://privateweb.software)")
+        text: qsTr("<a href=https://privateweb.software style=\"text-decoration: none\">Made by PrivateWeb Community</a>")
         font.pixelSize: 12
 
         anchors.verticalCenter: parent.verticalCenter

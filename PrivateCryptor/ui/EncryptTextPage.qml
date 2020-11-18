@@ -4,25 +4,59 @@ import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 import QtGraphicalEffects 1.15
+import QtQuick.Dialogs 1.3
 
 Page {
     id: encryptTextPage
 
+    MessageDialog {
+        id: errorMessageDialog
+        title: "Oops!"
+    }
+
     background: Rectangle {
         color: backgroundLightColor
         opacity: backgroundOpacity
+        radius: 8
     }
 
     property int itemLeftMargin: 20
     property int itemTopBottomMargin: 30
     property int itemDefaultMargin: 35
 
+    function checkForEmptyFields() {
+        if(encryptionAlgorithmComboBox.currentText !== "AES - GCM" && encryptionAlgorithmComboBox.currentText !== "AES - CCM") {
+            if (aesKeyField.length < 12) {
+                errorMessageDialog.text = "AES Key Field mustn't be empty or less then 12."
+                errorMessageDialog.open()
+                return true;
+            } else if (roundsField <= 0) {
+                errorMessageDialog.text = "Rounds Field mustn't be empty!"
+                errorMessageDialog.open()
+                return true;
+            } else if (randomDeltaField.length < 8) {
+                errorMessageDialog.text = "Random Delta Field mustn't be empty or less then 8."
+                errorMessageDialog.open()
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isGcm() {
+        if(encryptionAlgorithmComboBox.currentText === "AES - GCM") {
+            return true
+        } else {
+            return false
+        }
+    }
+
     ScrollView {
         clip: true
 
         anchors.fill: parent
 
-        contentWidth: firstColumn.implicitWidth + secondColumn.implicitWidth + thirdColumn.implicitWidth + fourthColumn.implicitWidth
+        contentWidth: firstColumn.implicitWidth + secondColumn.implicitWidth + thirdColumn.implicitWidth + (encryptTextPage.width - (firstColumn.implicitWidth + secondColumn.implicitWidth + thirdColumn.implicitWidth))
 
         ScrollBar.horizontal.policy: ScrollBar.AsNeeded
         ScrollBar.vertical.policy: ScrollBar.AsNeeded
@@ -286,7 +320,7 @@ Page {
                     Text {
                         id: stepSevenTextFirst
                         color: "#ffffff"
-                        text: qsTr("Step 7. Enter Random Delta. (Optional)")
+                        text: qsTr("Step 7. Enter Random Delta.")
                         font.pixelSize: 15
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -382,55 +416,90 @@ Page {
             ColumnLayout {
                 id: fourthColumn
 
-                Layout.fillHeight: true
-                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignTop | Qt.AlignRight | Qt.AlignBottom
 
-                TextField {
-                    id: encryptionTextField
-
-                    placeholderText: qsTr("Enter text that will be encrypted")
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignTop
-
+                ScrollView {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                    Layout.maximumHeight: encryptTextPage.height / 2.5
                     Layout.margins: 20
 
-                    onTextEdited: {
-                        decryptionTextField.text = encryptionProcess.encryptDecryptTextWithBlockCipher(
-                                                        true, parseInt(roundsField.text),
-                                                        encryptionTextField.text, blockSizeComboBox.currentText,
-                                                        encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
-                                                        aesKeyField.text, initializationVectorField.text,
-                                                        randomDeltaField.text, passwordField.text)
+                    TextArea {
+                        id: encryptionTextField
+
+                        placeholderText: qsTr("Enter text that will be encrypted")
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignTop
+
+                        background: Rectangle {
+                            border.color: "grey"
+                            color: "white"
+                        }
+
+                        onTextChanged: {
+                            if (checkForEmptyFields() === false) {
+                                if(encryptionAlgorithmComboBox.currentText !== "AES - GCM" && encryptionAlgorithmComboBox.currentText !== "AES - CCM") {
+                                    decryptionTextField.text = encryptionProcess.encryptDecryptTextWithBlockCipher(
+                                                true, parseInt(roundsField.text),
+                                                encryptionTextField.text, blockSizeComboBox.currentText,
+                                                encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
+                                                aesKeyField.text, initializationVectorField.text,
+                                                randomDeltaField.text, passwordField.text)
+
+                                } else {
+                                    decryptionTextField.text = encryptionProcess.encryptDecryptTextWithAEAD(
+                                                true, isGcm(),
+                                                encryptionTextField.text, blockSizeComboBox.currentText, encryptionAlgorithmComboBox.currentText,
+                                                aesKeyField.text, initializationVectorField.text, authTagField.text, aadField.text)
+                                }
+
+                                decryptionTextField.cursorPosition = decryptionTextField.text.length
+                            }
+                        }
                     }
                 }
 
-                TextField {
-                    id: decryptionTextField
-
-                    placeholderText: qsTr("Enter text that will be decrypted")
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignTop
-
+                ScrollView {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignTop | Qt.AlignRight | Qt.AlignBottom
+                    Layout.maximumHeight: encryptTextPage.height / 2.5
                     Layout.margins: 20
 
-                    onTextEdited: {
-                        encryptionTextField.text = encryptionProcess.encryptDecryptTextWithBlockCipher(
-                                                        false, parseInt(roundsField.text),
-                                                        decryptionTextField.text, blockSizeComboBox.currentText,
-                                                        encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
-                                                        aesKeyField.text, initializationVectorField.text,
-                                                        randomDeltaField.text, passwordField.text)
+                    TextArea {
+                        id: decryptionTextField
+
+                        placeholderText: qsTr("Enter text that will be decrypted")
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignTop
+
+                        background: Rectangle {
+                            border.color: "black"
+                            color: "white"
+                        }
+
+                        onTextChanged: {
+                            if (checkForEmptyFields() === false) {
+                                if(encryptionAlgorithmComboBox.currentText !== "AES - GCM" && encryptionAlgorithmComboBox.currentText !== "AES - CCM") {
+                                    encryptionTextField.text = encryptionProcess.encryptDecryptTextWithBlockCipher(
+                                                false, parseInt(roundsField.text),
+                                                decryptionTextField.text, blockSizeComboBox.currentText,
+                                                encryptionAlgorithmComboBox.currentText, hashAlgorithmComboBox.currentText,
+                                                aesKeyField.text, initializationVectorField.text,
+                                                randomDeltaField.text, passwordField.text)
+                                } else {
+                                    encryptionTextField.text = encryptionProcess.encryptDecryptTextWithAEAD(
+                                                false, isGcm(),
+                                                decryptionTextField.text, blockSizeComboBox.currentText, encryptionAlgorithmComboBox.currentText,
+                                                aesKeyField.text, initializationVectorField.text, authTagField.text, aadField.text)
+                                }
+
+                                encryptionTextField.cursorPosition = encryptionTextField.text.length
+                            }
+                        }
                     }
                 }
             }

@@ -5,13 +5,15 @@ import QtQuick.Window 2.15
 import QtGraphicalEffects 1.15
 
 Item {
-    id: backGround
+    id: mainBackground
     anchors.fill: parent
     
-    property string gradientColorOne: "#8874D0"
-    property string gradientColorTwo: "#583EB6"
-    property string gradientColorThree: "#4F37A2"
-    property string gradientColorFour: "#332468"
+    property int backgroundAnimationDuration: 8000
+
+    property string gradientColorOne: "#144552"
+    property string gradientColorTwo: "#272640"
+    property string gradientColorThree: "#312244"
+    property string gradientColorFour: "#3E1F47"
 
     Rectangle {
         id: backGroundRectangle
@@ -19,8 +21,8 @@ Item {
         
         LinearGradient {
             anchors.fill: parent
-            start: Qt.point(backGround.width, 0)
-            end: Qt.point(0, backGround.height)
+            start: Qt.point(mainBackground.width, 0)
+            end: Qt.point(0, mainBackground.height)
             
             gradient: Gradient {
                 GradientStop {
@@ -31,26 +33,26 @@ Item {
                     */
                     SequentialAnimation on color {
                         loops: Animation.Infinite
-                        ColorAnimation { from: gradientColorOne; to: gradientColorTwo; duration: 8000 }
-                        ColorAnimation { from: gradientColorTwo; to: gradientColorOne; duration: 8000 }
-                        ColorAnimation { from: gradientColorOne; to: gradientColorFour; duration: 8000 }
-                        ColorAnimation { from: gradientColorFour; to: gradientColorOne; duration: 8000 }
+                        ColorAnimation { from: gradientColorOne; to: gradientColorTwo; duration: backgroundAnimationDuration }
+                        ColorAnimation { from: gradientColorTwo; to: gradientColorOne; duration: backgroundAnimationDuration }
+                        ColorAnimation { from: gradientColorOne; to: gradientColorFour; duration: backgroundAnimationDuration }
+                        ColorAnimation { from: gradientColorFour; to: gradientColorOne; duration: backgroundAnimationDuration }
                     }
                 }
                 GradientStop {
-                    position: 0.5
+                    position: 0.7
                     SequentialAnimation on color {
                         loops: Animation.Infinite
-                        ColorAnimation { from: gradientColorTwo; to: gradientColorThree; duration: 8000 }
-                        ColorAnimation { from: gradientColorThree; to: gradientColorTwo; duration: 8000 }
+                        ColorAnimation { from: gradientColorTwo; to: gradientColorThree; duration: backgroundAnimationDuration }
+                        ColorAnimation { from: gradientColorThree; to: gradientColorTwo; duration: backgroundAnimationDuration }
                     }
                 }
                 GradientStop {
                     position: 1
                     SequentialAnimation on color {
                         loops: Animation.Infinite
-                        ColorAnimation { from: gradientColorThree; to: gradientColorFour; duration: 8000 }
-                        ColorAnimation { from: gradientColorFour; to: gradientColorThree; duration: 8000 }
+                        ColorAnimation { from: gradientColorThree; to: gradientColorFour; duration: backgroundAnimationDuration }
+                        ColorAnimation { from: gradientColorFour; to: gradientColorThree; duration: backgroundAnimationDuration }
                     }
                 }
             }

@@ -12,7 +12,7 @@ RowLayout {
     spacing: 4
     
     CustomMenuButton {
-        id: customMenuButton3
+        id: encryptPageButton
 
         textOnButton: "Encrypt Text"
 
@@ -24,7 +24,7 @@ RowLayout {
     }
     
     CustomMenuButton {
-        id: customMenuButton4
+        id: decryptPageButton
 
         textOnButton: "Decrypt Text"
 

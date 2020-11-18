@@ -14,4 +14,5 @@
         <file>images/logo/icon.svg</file>
         <file>images/menu/backArrow.svg</file>
     </qresource>
+    <qresource prefix="/fonts"/>
 </RCC>
