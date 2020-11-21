@@ -9,12 +9,14 @@ int main(int argc, char* argv[])
 
     QApplication app(argc, argv);
 
+    /* Set up organization information */
     QGuiApplication::setOrganizationName("PrivateWeb");
     QGuiApplication::setOrganizationDomain("https://privateweb.software");
 
-    /* Register c++ in qml */
+    /* Register C++ classes in qml */
     qmlRegisterType<EncryptionProcess>("encryptionProcess", 1, 0, "EncryptionProcess");
 
+    /* Load UI */
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/ui/ui/main.qml"));
     QObject::connect(

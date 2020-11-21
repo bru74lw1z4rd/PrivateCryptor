@@ -7,18 +7,17 @@ EncryptionProcess::EncryptionProcess(QObject* parent)
 
 ///
 /// \brief EncryptionProcess::encryptDecryptFileWithBlockCipher
-/// \param isEncrypt
-/// \param rounds
-/// \param currentFileName
-/// \param newFileName
-/// \param blockSizeType
-/// \param cipher
-/// \param hashCipher
-/// \param key
-/// \param iv
-/// \param salt
-/// \param password
-/// \return
+/// \param isEncrypt - Type of operation
+/// \param rounds - Transformation rounds
+/// \param currentFilePath - Path to file that will be processed
+/// \param blockSizeType - UI elemented selected by user
+/// \param cipher - UI elemented selected by user
+/// \param hashCipher - UI elemented selected by user
+/// \param key - AES key
+/// \param iv - Initialization vector
+/// \param salt - Random delta
+/// \param password - Encryption password
+/// \return - Result of operation
 ///
 bool EncryptionProcess::encryptDecryptFileWithBlockCipher(const bool isEncrypt, const int rounds,
     QString currentFilePath, const QByteArray& blockSizeType,
@@ -70,18 +69,18 @@ bool EncryptionProcess::encryptDecryptFileWithBlockCipher(const bool isEncrypt, 
 }
 
 ///
-/// \brief EncryptionProcess::encryptDecryptText
-/// \param isEncrypt
-/// \param rounds
-/// \param data
-/// \param blockSizeType
-/// \param cipher
-/// \param hashCipher
-/// \param key
-/// \param iv
-/// \param salt
-/// \param password
-/// \return
+/// \brief EncryptionProcess::encryptDecryptTextWithBlockCipher
+/// \param isEncrypt - Type of operation
+/// \param rounds - Transformation rounds
+/// \param data - Data that will be encrypted
+/// \param blockSizeType - UI elemented selected by user
+/// \param cipher - UI elemented selected by user
+/// \param hashCipher - UI elemented selected by user
+/// \param key - AES key
+/// \param iv - Initialization vector
+/// \param salt - Random delta
+/// \param password - Encryption password
+/// \return - Encrypted or decrypted data
 ///
 QString EncryptionProcess::encryptDecryptTextWithBlockCipher(const bool isEncrypt, const int rounds,
     const QByteArray& data, const QByteArray& blockSizeType,
@@ -103,9 +102,9 @@ QString EncryptionProcess::encryptDecryptTextWithBlockCipher(const bool isEncryp
 }
 
 ///
-/// \brief EncryptionProcess::processQmlAesBlockSize
-/// \param aesBlockSizeType
-/// \return
+/// \brief EncryptionProcess::processQmlAesBlockSize - processes QML element selected by users
+/// \param aesBlockSizeType - UI elemented selected by user
+/// \return - Type of cipher in list
 ///
 int EncryptionProcess::processQmlAesBlockSize(const QString& aesBlockSizeType)
 {
@@ -121,11 +120,10 @@ int EncryptionProcess::processQmlAesBlockSize(const QString& aesBlockSizeType)
 }
 
 ///
-/// \brief EncryptionProcess::processQmlValue
-/// \param isCipher
-/// \param blockSizeType
-/// \param cipherType14
-/// \return
+/// \brief EncryptionProcess::processQmlCipher - processes QML element selected by users
+/// \param blockSizeType - UI elemented selected by user
+/// \param cipherType - UI elemented selected by user
+/// \return - OpenSSL EVP_Cipher
 ///
 const EVP_CIPHER* EncryptionProcess::processQmlCipher(const int blockSizeType, const QString& cipherType)
 {
@@ -145,9 +143,9 @@ const EVP_CIPHER* EncryptionProcess::processQmlCipher(const int blockSizeType, c
 }
 
 ///
-/// \brief EncryptionProcess::processQmlMD
-/// \param mdType
-/// \return
+/// \brief EncryptionProcess::processQmlMD - processes QML element selected by users
+/// \param mdType - UI elemented selected by user
+/// \return - OpenSSL EVP_MD
 ///
 const EVP_MD* EncryptionProcess::processQmlMD(const QString& mdType)
 {

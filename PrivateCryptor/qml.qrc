@@ -18,7 +18,4 @@
         <file>images/menu/backArrow.svg</file>
     </qresource>
     <qresource prefix="/fonts"/>
-    <qresource prefix="/">
-        <file>qtquickcontrols2.conf</file>
-    </qresource>
 </RCC>

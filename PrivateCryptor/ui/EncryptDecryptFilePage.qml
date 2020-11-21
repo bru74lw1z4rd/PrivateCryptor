@@ -125,12 +125,14 @@ Page {
                             text: "Decrypt"
 
                             onClicked: {
-                                encryptionProcess.encryptDecryptFileWithBlockCipher(
-                                            false, parseInt(secondColumn.roundsField.text),
-                                            fileDialog.currentFile.toString(), firstColumn.blockSizeComboBox.currentText,
-                                            firstColumn.encryptionAlgorithmComboBox.currentText, firstColumn.hashAlgorithmComboBox.currentText,
-                                            firstColumn.aesKeyField.text, firstColumn.initializationVectorField.text,
-                                            secondColumn.randomDeltaField.text, secondColumn.passwordField.text)
+                                if (checkForEmptyFields() === false) {
+                                    encryptionProcess.encryptDecryptFileWithBlockCipher(
+                                                false, parseInt(secondColumn.roundsField.text),
+                                                fileDialog.currentFile.toString(), firstColumn.blockSizeComboBox.currentText,
+                                                firstColumn.encryptionAlgorithmComboBox.currentText, firstColumn.hashAlgorithmComboBox.currentText,
+                                                firstColumn.aesKeyField.text, firstColumn.initializationVectorField.text,
+                                                secondColumn.randomDeltaField.text, secondColumn.passwordField.text)
+                                }
                             }
                         }
 
