@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file>ui/main.qml</file>
+        <file>ui/AppCreatorInformation.qml</file>
+        <file>ui/BackGround.qml</file>
+        <file>ui/CustomMenuButton.qml</file>
+        <file>ui/MainMenuLayout.qml</file>
+        <file>ui/MainPage.qml</file>
+        <file>ui/EncryptTextPage.qml</file>
+        <file>ui/EncryptDecryptFilePage.qml</file>
+        <file>ui/FirstColumn.qml</file>
+        <file>ui/SecondColumn.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/logo/icon.ico</file>
+        <file>images/logo/icon.png</file>
+        <file>images/logo/icon.svg</file>
+        <file>images/menu/backArrow.svg</file>
+    </qresource>
+    <qresource prefix="/fonts"/>
+</RCC>
