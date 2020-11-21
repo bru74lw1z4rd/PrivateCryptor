@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 import QtGraphicalEffects 1.15
+import QtQuick.Dialogs 1.3
 
 import encryptionProcess 1.0
 
@@ -21,6 +22,11 @@ Window {
 
     EncryptionProcess {
         id: encryptionProcess
+    }
+
+    MessageDialog {
+        id: errorMessageDialog
+        title: "Oops!"
     }
 
     property double backgroundOpacity: 0.3
@@ -77,17 +83,19 @@ Window {
         visible: (pageStackView.currentItem === encryptDecryptTextPage) ? true : false
     }
 
-    Page {
+    EncryptDecryptFilePage {
         id: encryptDecryptFilePage
         visible: (pageStackView.currentItem === encryptDecryptFilePage) ? true : false
     }
 
     CustomMenuButton {
         id: customMenuButton
+        visible: (pageStackView.currentItem !== mainPage) ? true : false
+
         width: 35
         height: 35
-        imageSourceButton: "qrc:/images/images/menu/backArrow.svg"
-        visible: (pageStackView.currentItem !== mainPage) ? true : false
+
+        imageSourceButton: "qrc:/images/images/menu/backArrow.svg"        
 
         anchors.left: parent.left
         anchors.bottom: parent.bottom
@@ -97,10 +105,19 @@ Window {
 
     AppCreatorInformation {
         id: appCreatorInformation
+
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
         anchors.rightMargin: 15
+    }
+
+    Connections {
+        target: encryptionProcess
+        function onOpenMessageDialog(text) {
+            errorMessageDialog.text = text
+            errorMessageDialog.open()
+        }
     }
 }
 

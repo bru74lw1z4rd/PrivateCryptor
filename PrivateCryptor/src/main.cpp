@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 #include "EncryptionProcess/EncryptionProcess.h"
@@ -7,7 +7,10 @@ int main(int argc, char* argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
+    QGuiApplication::setOrganizationName("PrivateWeb");
+    QGuiApplication::setOrganizationDomain("https://privateweb.software");
 
     /* Register c++ in qml */
     qmlRegisterType<EncryptionProcess>("encryptionProcess", 1, 0, "EncryptionProcess");

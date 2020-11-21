@@ -6,6 +6,70 @@ EncryptionProcess::EncryptionProcess(QObject* parent)
 }
 
 ///
+/// \brief EncryptionProcess::encryptDecryptFileWithBlockCipher
+/// \param isEncrypt
+/// \param rounds
+/// \param currentFileName
+/// \param newFileName
+/// \param blockSizeType
+/// \param cipher
+/// \param hashCipher
+/// \param key
+/// \param iv
+/// \param salt
+/// \param password
+/// \return
+///
+bool EncryptionProcess::encryptDecryptFileWithBlockCipher(const bool isEncrypt, const int rounds,
+    QString currentFilePath, const QByteArray& blockSizeType,
+    const QByteArray& cipher, const QByteArray& hashCipher,
+    const QByteArray& key, const QByteArray& iv,
+    const QByteArray& salt, const QByteArray& password)
+{
+    /* Read data from user file */
+    QFile userFile(currentFilePath.remove("file://"));
+    if (!userFile.open(QIODevice::ReadOnly)) {
+        openMessageDialog("Couldn't read data from file!");
+        return false;
+    }
+
+    /* Initialize data store */
+    QByteArray data;
+    data.reserve(userFile.size());
+    data = userFile.readAll();
+
+    if (isEncrypt) {
+        /* Save encrypted file */
+        QFile file(currentFilePath + ".pcrypto");
+        if (file.open(QIODevice::ReadWrite)) {
+            QSimpleCrypto::QBlockCipher blockCipher;
+            if (0 >= file.write(blockCipher.encryptAesBlockCipher(data, key, iv, password, salt, rounds, processQmlCipher(processQmlAesBlockSize(blockSizeType), cipher), processQmlMD(hashCipher)).toBase64())) {
+                openMessageDialog("Couldn't write encrypted data into file!");
+                return false;
+            }
+        } else {
+            openMessageDialog("Couldn't initialize encrypted file!");
+            return false;
+        }
+    } else {
+        /* Save decrypted file */
+        QFile file(currentFilePath.remove(".pcrypto"));
+        if (file.open(QIODevice::ReadWrite)) {
+            QSimpleCrypto::QBlockCipher blockCipher;
+            if (0 >= file.write(blockCipher.decryptAesBlockCipher(QByteArray::fromBase64(data), key, iv, password, salt, rounds, processQmlCipher(processQmlAesBlockSize(blockSizeType), cipher), processQmlMD(hashCipher)))) {
+                openMessageDialog("Couldn't write encrypted data into file!");
+                return false;
+            }
+        } else {
+            openMessageDialog("Couldn't initialize decrypted file!");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+///
 /// \brief EncryptionProcess::encryptDecryptText
 /// \param isEncrypt
 /// \param rounds
@@ -75,10 +139,6 @@ const EVP_CIPHER* EncryptionProcess::processQmlCipher(const int blockSizeType, c
         return aesOfbCiphersList.at(blockSizeType);
     } else if (cipherType == aesCtrType) {
         return aesCtrCiphersList.at(blockSizeType);
-    } else if (cipherType == aesCcmType) {
-        return aesCcmCiphersList.at(blockSizeType);
-    } else if (cipherType == aesGcmType) {
-        return aesGcmCiphersList.at(blockSizeType);
     }
 
     return nullptr;

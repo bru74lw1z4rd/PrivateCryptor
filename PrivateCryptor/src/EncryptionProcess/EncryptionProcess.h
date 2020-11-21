@@ -1,6 +1,7 @@
 #ifndef ENCRYPTIONPROCESS_H
 #define ENCRYPTIONPROCESS_H
 
+#include <QFile>
 #include <QObject>
 
 #include <QAEAD.h>
@@ -12,11 +13,20 @@ class EncryptionProcess : public QObject {
 public:
     explicit EncryptionProcess(QObject* parent = nullptr);
 
+    Q_INVOKABLE bool encryptDecryptFileWithBlockCipher(const bool isEncrypt, const int rounds,
+        QString currentFilePath, const QByteArray& blockSizeType,
+        const QByteArray& cipher, const QByteArray& hashCipher,
+        const QByteArray& key, const QByteArray& iv,
+        const QByteArray& salt, const QByteArray& password);
+
     Q_INVOKABLE QString encryptDecryptTextWithBlockCipher(const bool isEncrypt, const int rounds,
         const QByteArray& data, const QByteArray& blockSizeType,
         const QByteArray& cipher, const QByteArray& hashCipher,
         const QByteArray& key, const QByteArray& iv,
         const QByteArray& salt, const QByteArray& password);
+
+signals:
+    void openMessageDialog(const QString& text);
 
 private:
     /* Block size */
@@ -38,16 +48,12 @@ private:
     const QString aesCfbType = "AES - CFB";
     const QString aesOfbType = "AES - OFB";
     const QString aesCtrType = "AES - CTR";
-    const QString aesCcmType = "AES - GCM";
-    const QString aesGcmType = "AES - CCM";
 
     const QList<const EVP_CIPHER*> aesEcbCiphersList = { EVP_aes_128_ecb(), EVP_aes_192_ecb(), EVP_aes_256_ecb() };
     const QList<const EVP_CIPHER*> aesCbcCiphersList = { EVP_aes_128_cbc(), EVP_aes_192_cbc(), EVP_aes_256_cbc() };
     const QList<const EVP_CIPHER*> aesCfbCiphersList = { EVP_aes_128_cfb(), EVP_aes_192_cfb(), EVP_aes_256_cfb() };
     const QList<const EVP_CIPHER*> aesOfbCiphersList = { EVP_aes_128_ofb(), EVP_aes_192_ofb(), EVP_aes_256_ofb() };
     const QList<const EVP_CIPHER*> aesCtrCiphersList = { EVP_aes_128_ctr(), EVP_aes_192_ctr(), EVP_aes_256_ctr() };
-    const QList<const EVP_CIPHER*> aesCcmCiphersList = { EVP_aes_128_ccm(), EVP_aes_192_ccm(), EVP_aes_256_ccm() };
-    const QList<const EVP_CIPHER*> aesGcmCiphersList = { EVP_aes_128_gcm(), EVP_aes_192_gcm(), EVP_aes_256_gcm() };
 
     /* SHA */
     const EVP_MD* processQmlMD(const QString& mdType);
